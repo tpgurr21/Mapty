@@ -13,6 +13,8 @@ const inputElevation = document.querySelector('.form__input--elevation');
 
 // console.log(firstName) // this is imported from other.js script in html
 
+let map, mapEvent;
+
 if(navigator.geolocation)
 navigator.geolocation.getCurrentPosition(function(position) {
     const {latitude} = position.coords
@@ -21,7 +23,7 @@ navigator.geolocation.getCurrentPosition(function(position) {
 
     const coords = [latitude, longitude]
 
-    const map = L.map('map').setView(coords, 13);
+    map = L.map('map').setView(coords, 13);
     // console.log(map)
 
     // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -41,8 +43,25 @@ navigator.geolocation.getCurrentPosition(function(position) {
 //     .openPopup();
 // })
 
-map.on('click', function(mapEvent) {
-    const {lat, lng} = mapEvent.latlng
+// Handling clicks on map
+map.on('click', function(mapE) {
+    mapEvent = mapE
+    form.classList.remove('hidden')
+    inputDistance.focus();
+   
+});
+
+}, function() {
+    alert('Could not get your position')
+})
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Clear input fields
+    inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = '';
+    // Display marker
+     const {lat, lng} = mapEvent.latlng
 
 
     L.marker([lat, lng])
@@ -56,10 +75,10 @@ map.on('click', function(mapEvent) {
     }))
     .setPopupContent('Workout')
     .openPopup();
-})
+});
 
-}, function() {
-    alert('Could not get your position')
-})
+inputType.addEventListener('change', function() {
+    inputElevation.closest('.form__row').classList.toggle('form__row--hidden')
+    inputCadence.closest('.form__row').classList.toggle('form__row--hidden')
 
-console.log('map')
+})
