@@ -171,11 +171,14 @@ a:visited {
   display: none;
 }
 
-.copyright {
+.intro {
   margin-top: auto;
   font-size: 1.3rem;
   text-align: center;
   color: var(--color-light--1);
+}
+.intro.hidden {
+  opacity: 0;
 }
 
 .twitter-link:link,
